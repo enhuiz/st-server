@@ -2,8 +2,15 @@
 
 To run the server, you need to install [lein](https://leiningen.org/) first.
 
-After the installation, run the server by typing the following command:
+After the installation, run the server by typing the following command
 
+```
+$ lein figwheel
+```
+
+Then open another terminal, input the following command
 ```
 $ lein ring server
 ```
+
+The two steps above will take several minutes to download the dependencies at the first time you run them.
