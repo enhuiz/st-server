@@ -3,23 +3,29 @@
   (:require [clojure.java.jdbc :as jdbc]
             [st-server.db :as db]))
 
-(def user 
-  {:account ""
-   :password ""
-   :name ""})
-
 (def table-name "users")
 
+; (def user 
+;   {:account ""
+;    :password ""
+;    :name ""})
+
 (defn insert-root-user! []
-  (println "inserting root user")
-  (db/insert! table-name {:account "admin" :password "admin" :name "admin"}))
+  (try
+    (do 
+      (db/insert! table-name {:account "admin" :password "admin" :name "admin"})
+      (println "Root user inserted"))
+    (catch Throwable ex)))
+
+(defn get-all
+  []
+  (db/query "select account, name from users"))
 
 (defn init-table!
   []
   (db/create-table!
-    table-name 
-    [[:id "bigint primary key auto_increment"]
-     [:account "varchar unique"]
+    table-name
+    [[:account "varchar primary key"]
      [:password "varchar"]
      [:name "varchar"]])
   (insert-root-user!))

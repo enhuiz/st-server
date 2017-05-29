@@ -18,10 +18,12 @@
                  [org.clojure/java.jdbc "0.4.2"]
                  [com.h2database/h2 "1.4.189"]
                  [secretary "1.2.3"]
+                 [org.clojure/tools.logging "0.2.3"]
                  [venantius/accountant "0.2.0"
                   :exclusions [org.clojure/tools.reader]]]
 
   :plugins [[lein-environ "1.0.2"]
+            [lein-ring "0.12.0"]
             [lein-cljsbuild "1.1.5"]
             [lein-asset-minifier "0.2.7"
              :exclusions [org.clojure/clojure]]]
@@ -33,7 +35,9 @@
 
   :uberjar-name "st-server.jar"
 
-  :main st-server.server
+  ; :main st-server.server
+
+  :repl-options {:init-ns st-server.server}
 
   :clean-targets ^{:protect false}
   [:target-path

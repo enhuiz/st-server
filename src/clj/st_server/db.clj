@@ -18,18 +18,26 @@
       false)))
 
 (defn insert!
-  [table-name instance]
-  (-> (jdbc/insert! db (keyword table-name) instance)
+  [table m]
+  (-> (jdbc/insert! db (keyword table) m)
    first))
 
-(defn query-all
-  [table] (jdbc/query db ["select * from ?" table]))
+(defn update!
+  [table m sql]
+  (jdbc/update! db (keyword table) m sql))
+
+; (defn query-all
+;   [table]
+;   (jdbc/query db ["select * from ?" (keyword table)]))
+
+(defn query
+  [sql] (jdbc/query db sql))
 
 (defn create-table!
-  [table-name fields]
+  [table fields]
   (jdbc/with-db-transaction [conn db]
-    (if-not (exists? table-name)
-      (do (println "creating table" table-name)
+    (if-not (exists? table)
+      (do (println "creating table" table)
           (jdbc/execute! conn 
-            [(apply jdbc/create-table-ddl (concat [(keyword table-name)] fields))]))
-      (println "table" table-name "already exists"))))
+            [(apply jdbc/create-table-ddl (concat [(keyword table)] fields))]))
+      (println "table" table "already exists"))))
