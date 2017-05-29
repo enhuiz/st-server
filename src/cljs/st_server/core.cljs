@@ -61,8 +61,8 @@
         [:div.content
           [:p.header (:name m)]
           [:p.description (str "@" (:wechat m))]
-          [:p.description (apply str (filter #(re-seq #"[\w :+]" %) (str (:timestamp m))))]
           [:br]
+          [:p.description (apply str (filter #(re-seq #"[\w :+]" %) (str "Joined at: " (:timestamp m))))]
           [:div.ui.labeled.button.mini {:on-click 
                                           #(GET 
                                           "/book"

@@ -25,17 +25,17 @@
   [m]
   (db/insert! table-name m))
  
-(defn book
-  [m]
-  (let [new-bc (inc (get-bookcount m))]
-    (db/update! table-name {:bookcount new-bc} ["wechat = ?" (:wechat m)])
-    new-bc))
-
 (defn get-bookcount
   [m]
   (try
     (:bookcount (first (db/query ["select bookcount from users where wechat = ?" (:wechat m)])))
     (catch Exception e (println e) 0)))
+
+(defn book
+  [m]
+  (let [new-bc (inc (get-bookcount m))]
+    (db/update! table-name {:bookcount new-bc} ["wechat = ?" (:wechat m)])
+    new-bc))
 
 (defn init-table!
   []
