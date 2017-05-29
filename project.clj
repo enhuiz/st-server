@@ -10,12 +10,14 @@
                  [reagent-utils "0.2.1"]
                  [ring "1.5.1"]
                  [ring/ring-defaults "0.2.3"]
+                 [ring/ring-anti-forgery "1.1.0"]
                  [compojure "1.5.2"]
                  [hiccup "1.0.5"]
                  [yogthos/config "0.8"]
                  [org.clojure/clojurescript "1.9.521"
                   :scope "provided"]
                  [org.clojure/java.jdbc "0.4.2"]
+                 [cljs-ajax "0.6.0"]
                  [com.h2database/h2 "1.4.189"]
                  [secretary "1.2.3"]
                  [org.clojure/tools.logging "0.2.3"]
@@ -36,8 +38,6 @@
   :uberjar-name "st-server.jar"
 
   ; :main st-server.server
-
-  :repl-options {:init-ns st-server.server}
 
   :clean-targets ^{:protect false}
   [:target-path
@@ -93,12 +93,13 @@
 
                    :dependencies [[ring/ring-mock "0.3.0"]
                                   [ring/ring-devel "1.5.1"]
+                                  [cljs-ajax "0.6.0"]
                                   [prone "1.1.4"]
                                   [figwheel-sidecar "0.5.10"]
                                   [org.clojure/tools.nrepl "0.2.13"]
                                   [com.cemerick/piggieback "0.2.2-SNAPSHOT"]
                                   [pjstadig/humane-test-output "0.8.1"]
-                                  ]
+                                  [ring/ring-anti-forgery "1.1.0"]]
 
                    :source-paths ["env/dev/clj"]
                    :plugins [[lein-figwheel "0.5.10"]

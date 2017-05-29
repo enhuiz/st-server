@@ -1,8 +1,13 @@
 (ns st-server.repl
+  (:require [st-server.users :as users])
   (:use st-server.handler
         figwheel-sidecar.repl-api
         ring.server.standalone
         [ring.middleware file-info file]))
+
+(defn init 
+  []
+  (users/init-table!))
 
 (defonce server (atom nil))
 
@@ -25,6 +30,7 @@
             (serve (get-handler)
                    {:port port
                     :auto-reload? true
+                    :init init
                     :join? false}))
     (println (str "You can view the site at http://localhost:" port))))
 

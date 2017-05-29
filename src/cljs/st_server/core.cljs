@@ -1,11 +1,14 @@
 (ns st-server.core
     (:require [reagent.core :as reagent :refer [atom]]
               [reagent.session :as session]
+              [ajax.core :refer [GET POST]]
+              [cljs.reader :refer [read-string]]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]))
 
 ;; -------------------------
 ;; Elements
+
 
 (defn input-element
   "An input element which updates its value on change"
@@ -21,38 +24,75 @@
            :value @value
            :on-change #(reset! value (-> % .-target .-value))}]])
 
-(defn account-input
-  [account-address-atom]
-  (input-element "account" "account" "text" account-address-atom))
-
-(defn password-input
-  [password-address-atom]
-  (input-element "password" "password" "password" password-address-atom))
+(defn wechat-input
+  [wechat-atom]
+  (input-element "" "Wechat" "text" wechat-atom))
 
 (defn name-input
-  [name-address-atom]
-  (input-element "name" "name" "text" name-address-atom))
+  [name-atom]
+  (input-element "" "Name" "text" name-atom))
+
+(defn face-input
+  [face-atom]
+  [:div
+    [:p "My Face"]
+    [:p (first @face-atom)]
+    [:label.ui.icon.basic.button {:for "file"}
+      ; [:i.image.icon]
+      "Select"]
+    [:input#file {:type "file" 
+                  :hidden "true"  
+                  :value @face-atom
+                  :on-change (fn [e] 
+                                (reset! face-atom (-> e .-target .-files)))}]])
 
 ;; -------------------------
 ;; Views
 
+(def users-atom (atom []))
+(GET "/users" {:handler #(reset! users-atom (read-string (str "[" % "]")))})
+
+(defn users-view []
+  [:div.ui.list
+    (for [ [i m] (sort-by (comp :bookcount second) > (map-indexed vector @users-atom))]
+      ^{:index i}
+        [:div.item
+        [:img.avatar.image {:src "https://semantic-ui.com/images/avatar2/small/rachel.png"}]
+        [:div.content
+          [:p.header (:name m)]
+          [:p.description (str "@" (:wechat m))]
+          [:p.description (apply str (filter #(re-seq #"[\w :+]" %) (str (:timestamp m))))]
+          [:br]
+          [:div.ui.labeled.button.mini {:on-click 
+                                          #(GET 
+                                          "/book"
+                                          {:params m
+                                            :handler (fn [new-bc]
+                                                      (swap! users-atom update-in [i] (fn [val]
+                                                          (update-in m [:bookcount] (fn [val] new-bc)))))})}
+            [:div.ui.red.button.mini
+              [:i.heart.icon] "Book"]
+              [:div.ui.basic.red.left.pointing.label (:bookcount m)]]]])])
 
 (defn home-page []
-  [:div [:h2 "Welcome to st-server"]
-   [:div [:a {:href "/register"} "go to register page"]]])
+  [:div.ui.text.container
+    [:div [:h2.ui.center.aligned.header "Welcome to bookface"]
+      [users-view]]])
 
-(defn register-page []
- (let [account (atom nil)
-       password (atom nil)
-       name (atom nil)]
+(defn join-page []
+ (let [wechat-atom (atom nil)
+       name-atom (atom nil)
+       bookcount-atom (atom nil)
+       timestamp-atom (atom nil)
+       face-atom (atom nil)]
   (fn []
-    [:div {:class "ui text container"}
-      [:h2 {:class "ui center aligned header"} "ST"]
+    [:div.ui.text.container
+      [:h2 {:class "ui center aligned header"} "Join bookface"]
       [:form {:class "ui form" :method "POST"}
-        [account-input account]
-        [password-input password]
-        [name-input name]
-        [:center [:button {:class "ui secondary button center aligned"} "Register"]]]])))
+        [wechat-input wechat-atom]
+        [name-input name-atom]
+        [face-input face-atom]
+        [:center [:button {:class "ui red button"} "Join"]]]])))
 
 (defn current-page []
   [:div [(session/get :current-page)]])
@@ -63,8 +103,8 @@
 (secretary/defroute "/" []
   (session/put! :current-page #'home-page))
 
-(secretary/defroute "/register" []
-  (session/put! :current-page #'register-page))
+(secretary/defroute "/join" []
+  (session/put! :current-page #'join-page))
 
 ;; -------------------------
 ;; Initialize app

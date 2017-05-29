@@ -9,51 +9,54 @@
 
 (def mount-target
   [:div#app
-      [:h3 "ClojureScript has not been compiled!"]
-      [:p "please run "
-       [:b "lein figwheel"]
-       " in order to start the compiler"]])
+      [:h3 "Loading..."]])
 
 (defn head []
   [:head
    [:meta {:charset "utf-8"}]
    [:meta {:name "viewport"
            :content "width=device-width, initial-scale=1"}]
-   (include-css "https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.css")])
+   (include-css "https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.css")
+   [:body
+    [:div.ui.menu
+    [:a.header.item {:href "/"} "bookface"]
+    [:div.right.menu
+      [:a.item {:href "/join"} "Join"]]]]])
 
 (defn loading-page []
   (html5
     (head)
-    [:body
      mount-target
      (include-js "https://cdn.bootcss.com/jquery/2.2.1/jquery.js")     
      (include-js "https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js")
-     (include-js "/js/app.js")]))
-
-(defn what-is-my-ip [request]
-  {:status 200
-   :headers {"Content-Type" "text/plain"}
-   :body (:remote-addr request)})
+     (include-js "/js/app.js")))
 
 (defn get-all-users [request]
   (users/get-all))
 
-(defn register [request]
-  (let [params (:form-params request)]
-    (fn [] 
-      (println params))))
+(defn join-result
+  [result]
+  (html5
+    (head)
+    [:body
+      [:p (if result "Success" "Duplicated wechat!")]]))
+
+(defn join [request]
+  (let [m (:form-params request)]
+    (join-result (users/add m))))
+
+(defn book [request]
+  (let [m (:params request)]
+    (str (users/book m))))
 
 (defroutes routes
   (GET "/" [] (loading-page))
-  (GET "/about" [] (loading-page))
-  (GET "/register" [] (loading-page))
+  (GET "/join" [] (loading-page))
+  (POST "/join" [] join)
 
-  (GET "/ip" [] what-is-my-ip)
+  (GET "/book" [] book)
+
   (GET "/users" [] get-all-users)
-
-
-  (POST "/register" [] register)
-
   (resources "/")
   (not-found "Not Found"))
 

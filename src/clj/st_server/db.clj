@@ -19,8 +19,9 @@
 
 (defn insert!
   [table m]
-  (-> (jdbc/insert! db (keyword table) m)
-   first))
+  (try 
+    (do (jdbc/insert! db (keyword table) m) true)
+    (catch Exception e (do (println e) false))))
 
 (defn update!
   [table m sql]
