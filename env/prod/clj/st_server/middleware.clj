@@ -1,5 +1,11 @@
 (ns st-server.middleware
-  (:require [ring.middleware.defaults :refer [site-defaults wrap-defaults]]))
+  (:require [ring.middleware.defaults :refer [api-defaults wrap-defaults]]
+            [prone.middleware :refer [wrap-exceptions]]
+            [ring.middleware.logger :refer [wrap-with-logger]]
+            [ring.middleware.reload :refer [wrap-reload]]))
+
 
 (defn wrap-middleware [handler]
-  (wrap-defaults handler site-defaults))
+  (-> handler
+      (wrap-defaults api-defaults)
+      wrap-with-logger))

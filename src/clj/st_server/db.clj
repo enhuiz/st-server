@@ -21,7 +21,7 @@
   [table m]
   (try 
     (do (jdbc/insert! db (keyword table) m) true)
-    (catch Exception e (do (println e) false))))
+    (catch Exception e (do (println "Failed to insert") false))))
 
 (defn update!
   [table m sql]

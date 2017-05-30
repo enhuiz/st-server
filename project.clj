@@ -13,6 +13,7 @@
                  [ring/ring-anti-forgery "1.1.0"]
                  [compojure "1.5.2"]
                  [hiccup "1.0.5"]
+                 [org.clojure/tools.logging "0.3.1"]
                  [yogthos/config "0.8"]
                  [org.clojure/clojurescript "1.9.521"
                   :scope "provided"]
@@ -20,7 +21,7 @@
                  [cljs-ajax "0.6.0"]
                  [com.h2database/h2 "1.4.189"]
                  [secretary "1.2.3"]
-                 [org.clojure/tools.logging "0.2.3"]
+                 [ring.middleware.logger "0.5.0"]
                  [venantius/accountant "0.2.0"
                   :exclusions [org.clojure/tools.reader]]]
 
@@ -72,9 +73,6 @@
               :source-map true
               :optimizations :none
               :pretty-print  true}}
-
-
-
             }
    }
 
@@ -97,6 +95,7 @@
                                   [ring/ring-devel "1.5.1"]
                                   [cljs-ajax "0.6.0"]
                                   [prone "1.1.4"]
+                                  [org.clojure/tools.logging "0.3.1"]
                                   [figwheel-sidecar "0.5.10"]
                                   [org.clojure/tools.nrepl "0.2.13"]
                                   [com.cemerick/piggieback "0.2.2-SNAPSHOT"]

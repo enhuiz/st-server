@@ -2,7 +2,6 @@
   (:require [compojure.core :refer [GET POST defroutes]]
             [compojure.route :refer [not-found resources]]
             [hiccup.page :refer [include-js include-css html5]]
-            [clojure.tools.logging :as log]
             [st-server.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]
             [st-server.users :as users]))
@@ -39,7 +38,9 @@
   (html5
     (head)
     [:body
-      [:p (if result "Success" "Duplicated wechat!")]]))
+      [:h2.ui.center.aligned.header (if result "Success" "Duplicated wechat!")]
+      [:center
+        [:a.ui.button.basic.black {:href (if result "/" "/join")}  "Alright"]]]))
 
 (defn join [request]
   (let [m (:form-params request)]
