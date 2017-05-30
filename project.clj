@@ -31,6 +31,8 @@
              :exclusions [org.clojure/clojure]]]
 
   :ring {:handler st-server.handler/app
+         :init st-server.handler/init
+         :port 2333
          :uberwar-name "st-server.war"}
 
   :min-lein-version "2.5.0"

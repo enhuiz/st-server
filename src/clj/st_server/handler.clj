@@ -60,6 +60,10 @@
   (resources "/")
   (not-found "Not Found"))
 
+(defn init 
+  []
+  (users/init-table!))
+
 (def app 
   (-> routes
       wrap-middleware))

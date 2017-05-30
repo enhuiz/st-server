@@ -1,13 +1,8 @@
 (ns st-server.repl
-  (:require [st-server.server])
   (:use st-server.handler
         figwheel-sidecar.repl-api
         ring.server.standalone
         [ring.middleware file-info file]))
-
-(defn init 
-  []
-  (users/init-table!))
 
 (defonce server (atom nil))
 
