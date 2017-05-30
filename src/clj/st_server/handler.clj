@@ -26,8 +26,8 @@
   (html5
     (head)
      mount-target
-     (include-js "https://cdn.bootcss.com/jquery/2.2.1/jquery.js")     
-     (include-js "https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js")
+    ;  (include-js "https://cdn.bootcss.com/jquery/2.2.1/jquery.js")     
+    ;  (include-js "https://cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js")
      (include-js "/js/app.js")))
 
 (defn get-all-users [request]
