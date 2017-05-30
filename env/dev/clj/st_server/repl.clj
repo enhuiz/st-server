@@ -1,5 +1,5 @@
 (ns st-server.repl
-  (:require [st-server.users :as users])
+  (:require [st-server.server])
   (:use st-server.handler
         figwheel-sidecar.repl-api
         ring.server.standalone

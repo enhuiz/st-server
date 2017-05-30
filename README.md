@@ -9,10 +9,19 @@ $ lein figwheel
 ```
 
 Then open another terminal, input the following command
+
+
+```
+$ lein ring server
+```
+
+or
+
 ```
 $ lein repl
 
 st-server.repl=> (start-server)
 ```
 
-The two steps above will take several minutes to download the dependencies at the first time you run them.
+
+The steps above will take several minutes to download the dependencies at the first time you run them.
